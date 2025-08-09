@@ -13,10 +13,16 @@ app.use(cors());
 
 app.get("/api/pexels", async (req, res) => {
   const query = req.query.query;
+  const perPageParsed = parseInt(req.query.photosPerPage, 10);
+  const photosPerPage = Number.isFinite(perPageParsed)
+    ? Math.min(80, Math.max(1, perPageParsed))
+    : 15;
 
   try {
     const response = await fetch(
-      `https://api.pexels.com/v1/search?query=${query}&per_page=12`,
+      `https://api.pexels.com/v1/search?query=${encodeURIComponent(
+        query
+      )}&per_page=${photosPerPage}`,
       {
         headers: {
           Authorization: API_KEY,
