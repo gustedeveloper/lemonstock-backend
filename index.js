@@ -18,11 +18,14 @@ app.get("/api/pexels", async (req, res) => {
     ? Math.min(80, Math.max(1, perPageParsed))
     : 15;
 
+  const pageParsed = parseInt(req.query.page, 10);
+  const page = Number.isFinite(pageParsed) && pageParsed > 0 ? pageParsed : 1;
+
   try {
     const response = await fetch(
       `https://api.pexels.com/v1/search?query=${encodeURIComponent(
         query
-      )}&per_page=${photosPerPage}`,
+      )}&per_page=${photosPerPage}&page=${page}`,
       {
         headers: {
           Authorization: API_KEY,
